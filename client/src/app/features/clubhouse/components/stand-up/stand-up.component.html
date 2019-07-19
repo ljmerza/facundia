@@ -1,0 +1,69 @@
+<div class="container">
+
+  <kd-loading [loading]=loading>
+    <button mat-mini-fab class='copy-button' color="primary" (click)="copyStandUp()">Copy</button>
+    <button mat-mini-fab class='copy-button-bottom' color="primary" (click)="copyStandUp()">Copy</button>
+
+    <mat-accordion>
+      <mat-expansion-panel [expanded]=true class='border'>
+        <mat-expansion-panel-header class='border'>
+          <mat-panel-title>
+            <h3>Modified Since {{yesterday | amDateFormat:'LL'}}</h3>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class='pt-3'>
+          <span *ngFor="let card of standUp?.yesterdayWork" (click)="toggleCard($event, card)">
+            <kp-ch-card [card]=card></kp-ch-card>
+          </span>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class='border'>
+        <mat-expansion-panel-header class='border'>
+          <mat-panel-title>
+            <h3>Rest of Work</h3>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class='pt-3'>
+          <span *ngFor="let card of standUp?.restOfWork" (click)="toggleCard($event, card)">
+            <kp-ch-card [card]=card></kp-ch-card>
+          </span>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class='border'>
+        <mat-expansion-panel-header class='border'>
+          <mat-panel-title>
+            <h3>In Dev</h3>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class='pt-3'>
+          <span *ngFor="let card of standUp?.inDevCards" (click)="toggleCard($event, card)">
+            <kp-ch-card [card]=card></kp-ch-card>
+          </span>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class='border'>
+        <mat-expansion-panel-header class='border'>
+          <mat-panel-title>
+            <h3>Ready For Dev</h3>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class='pt-3'>
+          <span *ngFor="let card of standUp?.readyForDevCards">
+            <kp-ch-card [card]=card (toggleCard)="toggleCard($event)"></kp-ch-card>
+          </span>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <form class="stand-up-form mt-3 border">
+      <mat-form-field class="full-width">
+        <textarea matInput name='standUpText' rows=20 [(ngModel)]="standUpText"></textarea>
+      </mat-form-field>
+    </form>
+  </kd-loading>
+
+  
+</div>

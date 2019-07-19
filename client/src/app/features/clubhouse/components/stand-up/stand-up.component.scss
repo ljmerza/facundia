@@ -1,0 +1,23 @@
+
+
+.full-width{
+    width: 100%;
+}
+
+.border {
+    border: 1px solid black;
+}
+
+.copy-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 100;
+}
+
+.copy-button-bottom {
+    position: absolute;
+    bottom: 50px;
+    right: 0;
+    z-index: 100;
+}

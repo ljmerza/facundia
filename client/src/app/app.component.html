@@ -1,0 +1,19 @@
+<mat-sidenav-container>
+  <div class="wrapper">
+    <kd-navbar></kd-navbar>
+    <div class="content" [@routeAnimations]="o.isActivated && o.activatedRoute.routeConfig.path">
+      <router-outlet #o="outlet"></router-outlet>
+    </div>
+
+    <div class="footer">
+      <div class="row">
+        <div class="col-12 signature">
+          &#169; <span class="year" data-testid="footer-year">{{year}}</span> - Leonardo Merza
+          <br class="d-block d-sm-none">
+          <fa-icon icon="rocket"></fa-icon> {{version}} <span *ngIf="!isProd">[{{envName}}]</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</mat-sidenav-container>
