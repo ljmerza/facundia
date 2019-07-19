@@ -8,7 +8,7 @@ export class ProjectsController {
     constructor(private readonly projectservice: ProjectsService) { }
 
     @Get('toggle/projects')
-    getProjects(@Query('authKey') authKey): Observable<ProjectInterface[]> {
+    getProjects(@Query('authKey') authKey: string): Observable<ProjectInterface[]> {
         return this.projectservice.getProjects(authKey);
     }
 }

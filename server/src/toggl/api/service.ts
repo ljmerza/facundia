@@ -12,7 +12,7 @@ export class TogglApiService {
         return this.config.get('TOGGL_URL');
     }
 
-    private setHeaders(authKey){
+    private setHeaders(authKey: string): { headers: { Authorization, 'Content-Type'}}{
         return {
             headers: {
                 'Authorization': `Basic ${authKey}`,
@@ -21,14 +21,14 @@ export class TogglApiService {
         };
     }
 
-    getData(urlPath, authKey): Observable<any> {
+    getData(urlPath: string, authKey: string): Observable<any> {
         const url = `${this.baseUrl}/${urlPath}`;
         return this.httpService.get(url, {
             ...this.setHeaders(authKey)
         });
     }
 
-    postData(urlPath, authKey, body): Observable<any> {
+    postData(urlPath: string, authKey: string, body:any): Observable<any> {
         const url = `${this.baseUrl}/${urlPath}}`;
         return this.httpService.post(url, {
             body,

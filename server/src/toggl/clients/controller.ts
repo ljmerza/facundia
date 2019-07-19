@@ -8,7 +8,7 @@ export class ClientsController {
     constructor(private readonly clientService: ClientsService) { }
 
     @Get('toggle/clients')
-    getClients(@Query('authKey') authKey): Observable<ClientInterface[]> {
+    getClients(@Query('authKey') authKey: string): Observable<ClientInterface[]> {
         return this.clientService.getClients(authKey);
     }
 }

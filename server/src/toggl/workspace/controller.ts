@@ -8,7 +8,7 @@ export class WorkSpaceController {
     constructor(private readonly WorkSpaceService: WorkSpaceService) { }
 
     @Get('toggle/workspace')
-    getWorkSpaces(@Query('authKey') authKey): Observable<WorkSpaceInterface[]> {
+    getWorkSpaces(@Query('authKey') authKey: string): Observable<WorkSpaceInterface[]> {
         return this.WorkSpaceService.getWorkSpaces(authKey);
     }
 }

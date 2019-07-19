@@ -9,7 +9,7 @@ import { TogglApiService } from '../api';
 export class ProjectsService {
 	constructor(private readonly apiService: TogglApiService) {}
 
-	getProjects(authKey): Observable<ProjectInterface[]> {
+	getProjects(authKey: string): Observable<ProjectInterface[]> {
 		return this.apiService.getData('me/projects', authKey).pipe(map(response => response.data));
 	}
 }
