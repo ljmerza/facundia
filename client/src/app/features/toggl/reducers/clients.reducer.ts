@@ -8,13 +8,13 @@ import {
 } from '../actions';
 
 
-export const initialClientState: ClientsState = {
+export const initialClientsState: ClientsState = {
     loading: false,
 };
 
 export const ClientReducer = createReducer(
-    initialClientState,
-    on(actionTogglGetClients, (state: ClientsState = initialClientState) => ({ ...state, loading: true })),
-    on(actionTogglGetClientsSuccess, (state: ClientsState = initialClientState, payload) => ({ ...state, loading: false, data: payload.data })),
-    on(actionTogglGetClientsError, (state: ClientsState = initialClientState, payload) => ({ ...state, loading: false, error: payload.error })),
+    initialClientsState,
+    on(actionTogglGetClients, (state: ClientsState = initialClientsState) => ({ ...state, loading: true })),
+    on(actionTogglGetClientsSuccess, (state: ClientsState = initialClientsState, payload) => ({ ...state, loading: false, data: payload.data })),
+    on(actionTogglGetClientsError, (state: ClientsState = initialClientsState, payload) => ({ ...state, loading: false, error: payload.error })),
 );

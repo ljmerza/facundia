@@ -6,9 +6,11 @@ export interface SettingsState {
 	theme: string;
 	nightTheme: string;
 	autoNightMode: boolean;
+	hour: number;
 	chToken: string;
 	chUsername: string;
-	hour: number;
+	tgUsername: string;
+	tgPassword: string;
 }
 
 export interface State extends CoreState {

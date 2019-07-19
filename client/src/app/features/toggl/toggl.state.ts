@@ -4,7 +4,7 @@ import {
 } from '@ngrx/store';
 
 import { ClientReducer, LoggerReducer } from './reducers';
-import { LoggerState, ClientState } from './models';
+import { LoggerState, ClientsState } from './models';
 
 
 export const reducers: ActionReducerMap<TogglState> = {
@@ -19,5 +19,5 @@ export const selectTogglState = createFeatureSelector<
 
 export interface TogglState {
     logger: LoggerState;
-    clients: ClientState;
+    clients: ClientsState;
 }

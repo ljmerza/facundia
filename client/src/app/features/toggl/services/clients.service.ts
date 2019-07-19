@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
 export class ClientsService {
     constructor(private httpClient: HttpClient) { }
 
-    getClients(): Observable<any> {
-        return this.httpClient.get(`api/toggle/clients`);
+    getClients(data): Observable<any> {
+        const authKey = window.btoa(`${data.username}:${data.password}`);
+        return this.httpClient.get(`api/toggle/clients?authKey=${authKey}`, );
     }
 }

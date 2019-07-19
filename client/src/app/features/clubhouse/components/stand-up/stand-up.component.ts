@@ -21,7 +21,7 @@ export class StandUpComponent implements OnInit, OnDestroy {
 
     standUp$: Subscription;
     username$: Subscription;
-    loading: false;
+    loading: boolean = false;
 
     standUp;
     standUpText: string;
@@ -34,7 +34,12 @@ export class StandUpComponent implements OnInit, OnDestroy {
         this.username$ = this.store.pipe(select(selectChUsername))
             .subscribe(chUsername => {
                 // if no username then go to login page else get stand up data
-                if (!chUsername) this.router.navigate(['/clubhouse/login']);
+                if (!chUsername) {
+                    this.router.navigate(['/clubhouse/login']);
+                    return;
+                }
+                
+                this.loading = true;
                 this.standUp$ = this.store.pipe(select(selectStandUp)).subscribe(this.processStandUpData.bind(this));
                 this.store.dispatch(actionClubhouseGetStandUp({ username: chUsername }));
             });

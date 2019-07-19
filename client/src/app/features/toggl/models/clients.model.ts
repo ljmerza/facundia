@@ -4,7 +4,7 @@ export interface ClientInterface {
 
 }
 
-export interface ClientState {
+export interface ClientsState {
     data?: ClientInterface[]
     error?: HttpErrorResponse
     loading: boolean

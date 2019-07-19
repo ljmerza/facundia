@@ -11,6 +11,10 @@ const routes: Routes = [
     path: 'clubhouse',
     loadChildren: () => import('./features/clubhouse/clubhouse.module').then(m => m.ClubhouseModule),
   },
+  {
+    path: 'toggl',
+    loadChildren: () => import('./features/toggl/toggl.module').then(m => m.TogglModule),
+  },
 ];
 
 @NgModule({

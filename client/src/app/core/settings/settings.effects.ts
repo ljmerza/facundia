@@ -52,7 +52,8 @@ export class SettingsEffects {
 			settingsActions.ActionSettingsChangeNightTheme,
 			settingsActions.ActionSettingsChangeAutoNightMode,
 			settingsActions.ActionSettingsChangeChToken,
-			settingsActions.ActionSettingsChangeChUsername
+			settingsActions.ActionSettingsChangeChUsername,
+			settingsActions.ActionSettingsChangeTg,
 		),
 		withLatestFrom(this.store.pipe(select(selectSettingsState))),
 		tap(([action, settings]) => this.localStorageService.setItem(SETTINGS_KEY, settings))

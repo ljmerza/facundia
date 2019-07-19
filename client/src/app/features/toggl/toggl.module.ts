@@ -19,6 +19,10 @@ import {
     reducers
 } from './toggl.state';
 
+import {
+    LogTimeComponent, LoginComponent
+} from './components';
+
 
 @NgModule({
     imports: [
@@ -35,6 +39,7 @@ import {
         LoggerService, ClientsService
     ],
     declarations: [
+        LogTimeComponent, LoginComponent
     ]
 })
 export class TogglModule { }

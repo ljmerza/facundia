@@ -10,6 +10,8 @@ export const initialState: SettingsState = {
   chToken: '',
   chUsername: '',
   hour: 0,
+  tgUsername: '',
+  tgPassword: '',
 };
 
 export const settingsReducer = createReducer(
@@ -20,8 +22,9 @@ export const settingsReducer = createReducer(
     settingsActions.ActionSettingsChangeAutoNightMode,
     settingsActions.ActionSettingsChangeChToken,
     settingsActions.ActionSettingsChangeChUsername,
+    settingsActions.ActionSettingsChangeTg,
     (state: SettingsState = initialState, payload) => {
-      return { ...state, ...payload };
+      return { ...initialState, ...state, ...payload };
     }
   )
 );
