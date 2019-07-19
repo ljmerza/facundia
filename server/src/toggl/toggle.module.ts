@@ -4,6 +4,8 @@ import {
     TogglApiModule, 
     TogglWorkSpaceModule,
     TogglClientsModule,
+    TogglProjectsModule,
+    TogglLoggerModule,
 } from './';
 
 
@@ -12,6 +14,8 @@ import {
         TogglApiModule,
         TogglWorkSpaceModule,
         TogglClientsModule,
+        TogglProjectsModule,
+        TogglLoggerModule,
     ],
     exports: [
     ]
