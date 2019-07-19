@@ -3,19 +3,21 @@ import {
     createFeatureSelector
 } from '@ngrx/store';
 
-import { StandUpReducer } from './reducers';
-import { StandUpState } from './models';
+import { ClientReducer, LoggerReducer } from './reducers';
+import { LoggerState, ClientState } from './models';
 
 
-export const reducers: ActionReducerMap<ClubhouseState> = {
-    standUp: StandUpReducer,
+export const reducers: ActionReducerMap<TogglState> = {
+    logger: LoggerReducer,
+    clients: ClientReducer,
 };
 
-export const selectClubhouseState = createFeatureSelector<
-    ClubhouseState
->('clubhouse');
+export const selectTogglState = createFeatureSelector<
+    TogglState
+>('toggl');
 
 
-export interface ClubhouseState {
-    standUp: StandUpState;
+export interface TogglState {
+    logger: LoggerState;
+    clients: ClientState;
 }

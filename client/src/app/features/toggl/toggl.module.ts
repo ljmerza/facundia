@@ -5,41 +5,36 @@ import { SharedModule } from '../../shared';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
-import { ClubhouseRoutingModule } from './clubhouse-routing.module';
-
-import { 
-    StandUpComponent, CardComponent, LoginComponent 
-} from './components';
+import { TogglRoutingModule } from './toggl-routing.module';
 
 import {
-    StandUpService
+    LoggerService, ClientsService
 } from './services';
 
 import {
-    StandUpEffects
+    LoggerEffects, ClientsEffects,
 } from './effects';
 
 import {
     reducers
-} from './clubhouse.state';
+} from './toggl.state';
 
 
 @NgModule({
     imports: [
         CommonModule,
         SharedModule,
-        ClubhouseRoutingModule,
+        TogglRoutingModule,
 
-        StoreModule.forFeature('clubhouse', reducers),
+        StoreModule.forFeature('toggl', reducers),
         EffectsModule.forFeature([
-            StandUpEffects
+            LoggerEffects, ClientsEffects
         ]),
     ],
     providers: [
-        StandUpService
+        LoggerService, ClientsService
     ],
     declarations: [
-        StandUpComponent, CardComponent, LoginComponent
     ]
 })
-export class ClubhouseModule { }
+export class TogglModule { }
