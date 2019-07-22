@@ -23,8 +23,8 @@ export class ClientsEffects {
     @Effect()
     getClients = this.actions$.pipe(
         ofType(actionTogglGetClients),
-        switchMap(data =>
-            this.service.getClients(data).pipe(
+        switchMap(() =>
+            this.service.getClients().pipe(
                 map(response => actionTogglGetClientsSuccess({data: response}),
                 catchError(error => {
                     this.notifications.error(error);

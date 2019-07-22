@@ -29,9 +29,8 @@ export class TogglApiService {
     }
 
     postData(urlPath: string, authKey: string, body:any): Observable<any> {
-        const url = `${this.baseUrl}/${urlPath}}`;
-        return this.httpService.post(url, {
-            body,
+        const url = `${this.baseUrl}/${urlPath}`;
+        return this.httpService.post(url, body, {
             ...this.setHeaders(authKey)
         });
     }

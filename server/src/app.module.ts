@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_FILTER } from '@nestjs/core';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -12,6 +13,7 @@ import {
 } from './toggl/toggle.module';
 
 import { ConfigModule } from './config';
+import { HttpExceptionFilter } from './http-exception.filter';
 
 
 @Module({
@@ -20,7 +22,13 @@ import { ConfigModule } from './config';
     ClubhouseModule,
     TogglModule,
   ],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
   controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

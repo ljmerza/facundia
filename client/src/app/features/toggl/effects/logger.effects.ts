@@ -23,14 +23,15 @@ export class LoggerEffects {
     @Effect()
     addLog = this.actions$.pipe(
         ofType(actionTogglAddLogger),
-        switchMap((data) =>
-            this.service.addLog(data).pipe(
-                map(response => actionTogglAddLoggerSuccess({data: response}),
-                catchError(error => {
-                    this.notifications.error(error);
-                    return of(actionTogglAddLoggerError({ error }));
-                })
+        switchMap(({log}) =>{
+            return this.service.addLog(log).pipe(
+                map(response => actionTogglAddLoggerSuccess({ data: response }),
+                    catchError(error => {
+                        this.notifications.error(error);
+                        return of(actionTogglAddLoggerError({ error }));
+                    })
+                )
             )
-        )
+        }
     ))
 }

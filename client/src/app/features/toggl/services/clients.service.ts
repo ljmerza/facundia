@@ -1,13 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
+
+import { selectSettings, SettingsState } from './../../../core/settings';
 
 @Injectable()
 export class ClientsService {
-    constructor(private httpClient: HttpClient) { }
+    private unsubscribe$: Subject<void> = new Subject<void>();
+    settings: SettingsState;
 
-    getClients(data): Observable<any> {
-        const authKey = window.btoa(`${data.username}:${data.password}`);
-        return this.httpClient.get(`api/toggle/clients?authKey=${authKey}`, );
+    constructor(private httpClient: HttpClient, private store: Store<{}>) {
+        store.pipe(select(selectSettings), takeUntil(this.unsubscribe$)).subscribe(settings => this.settings = settings);
+    }
+
+    getClients(): Observable<any> {
+        const authKey = window.btoa(`${this.settings.tgUsername}:${this.settings.tgPassword}`);
+        return this.httpClient.get(`api/toggle/clients?authKey=${authKey}`);
     }
 }

@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 import { SharedModule } from '../../shared';
 
 import { StoreModule } from '@ngrx/store';
@@ -29,6 +31,7 @@ import {
         CommonModule,
         SharedModule,
         TogglRoutingModule,
+        NgbModule,
 
         StoreModule.forFeature('toggl', reducers),
         EffectsModule.forFeature([
