@@ -51,8 +51,8 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <div class='pt-3'>
-          <span *ngFor="let card of standUp?.readyForDevCards">
-            <kp-ch-card [card]=card (toggleCard)="toggleCard($event)"></kp-ch-card>
+          <span *ngFor="let card of standUp?.readyForDevCards"  (click)="toggleCard($event, card)">
+            <kp-ch-card [card]=card></kp-ch-card>
           </span>
         </div>
       </mat-expansion-panel>
