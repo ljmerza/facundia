@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 import * as moment from 'moment';
 
 import { ROUTE_ANIMATIONS_ELEMENTS, selectSettings } from '../../../../core';
-import { actionTogglGetClients, actionTogglAddLogger } from '../../actions';
-import { selectClients, selectLogger } from '../../selectors';
+import { actionTogglGetProjects, actionTogglAddLogger } from '../../actions';
+import { selectProjects, selectLogger } from '../../selectors';
 
 
 @Component({
@@ -18,18 +18,15 @@ export class LogTimeComponent implements OnInit, OnDestroy  {
     routeAnimationsElements = ROUTE_ANIMATIONS_ELEMENTS;
 
     settings$: Subscription;
-    defaultClient$: Subscription;
-    clients$: Subscription;
-    getClients$: Subscription;
     addLog$: Subscription;
-
+    
     loading: boolean = false;
-
-    clients;
-    selectedClient: number;
+    
+    projects$: Subscription;
+    projects;
+    selectedProject: number;
 
     description = '';
-    
     logTime = { hour: 8, minute: 0 };
     hourStep = 1;
     minuteStep = 15;
@@ -54,15 +51,15 @@ export class LogTimeComponent implements OnInit, OnDestroy  {
                     return;
                 }
 
-                this.selectedClient = settings.tgDefaultClientId;
+                this.selectedProject = settings.tgDefaultProjectId;
 
-                // try to get clients list
-                this.clients$ = this.store.pipe(select(selectClients)).subscribe(clients => {
-                    this.clients = clients.data;
-                    this.loading = clients.loading;
+                // try to get projects list
+                this.projects$ = this.store.pipe(select(selectProjects)).subscribe(projects => {
+                    this.projects = projects.data;
+                    this.loading = projects.loading;
 
-                    if (this.clients || this.loading) return;
-                    this.store.dispatch(actionTogglGetClients());
+                    if (this.projects || this.loading) return;
+                    this.store.dispatch(actionTogglGetProjects());
                 });
             });
         
@@ -74,10 +71,8 @@ export class LogTimeComponent implements OnInit, OnDestroy  {
 
     ngOnDestroy(){
         if (this.settings$) this.settings$.unsubscribe();
-        if (this.defaultClient$) this.defaultClient$.unsubscribe();
-        if (this.clients$) this.clients$.unsubscribe();
-        if (this.getClients$) this.clients$.unsubscribe();
-        if (this.addLog$) this.clients$.unsubscribe();
+        if (this.projects$) this.projects$.unsubscribe();
+        if (this.addLog$) this.addLog$.unsubscribe();
     }
 
     submitTime(){
@@ -87,7 +82,7 @@ export class LogTimeComponent implements OnInit, OnDestroy  {
 
         const startOfLog = moment().startOf('day');
         const endOfLog = moment().startOf('day').add(hours, 'hours').add(minutes, 'minutes');
-        const selectedClientWid = this.clients.find(client => client.id === this.selectedClient).wid;
+        const selectedClientWid = this.projects.find(client => client.id === this.selectedProject).wid;
 
         const payload = {
             ...this.defaultPayload,

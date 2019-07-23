@@ -6,8 +6,8 @@ import {
     ActionSettingsChangeTg, 
     selectSettings, CoreState 
 } from '../../../../core';
-import { selectClients, } from '../../selectors';
-import { actionTogglGetClients } from '../../actions';
+import { selectProjects } from '../../selectors';
+import { actionTogglGetProjects } from '../../actions';
 
 
 @Component({
@@ -21,10 +21,10 @@ export class LoginComponent implements OnInit, OnDestroy  {
     settings$: Subscription;
     loading: boolean = false;
 
-    clients$: Subscription;
+    projects$: Subscription;
 
-    selectedClient: number;
-    clients;
+    selectedProject: number;
+    projects;
 
     constructor(public store: Store<CoreState>) { }
 
@@ -33,16 +33,16 @@ export class LoginComponent implements OnInit, OnDestroy  {
             .subscribe(settings => {
                 this.username = settings.tgUsername || '';
                 this.password = settings.tgPassword || '';
-                this.selectedClient = settings.tgDefaultClientId;
+                this.selectedProject = settings.tgDefaultProjectId;
                 if (!this.password || !this.username) return;
                 
-                // try to get clients list
-                this.clients$ = this.store.pipe(select(selectClients)).subscribe(clients => {
-                    this.clients = clients.data;
-                    this.loading = clients.loading;
+                // try to get projects list
+                this.projects$ = this.store.pipe(select(selectProjects)).subscribe(projects => {
+                    this.projects = projects.data;
+                    this.loading = projects.loading;
 
-                    if (this.clients || this.loading) return;
-                    this.store.dispatch(actionTogglGetClients());
+                    if (this.projects || this.loading) return;
+                    this.store.dispatch(actionTogglGetProjects());
                 });
             });
     }
@@ -52,6 +52,6 @@ export class LoginComponent implements OnInit, OnDestroy  {
     }
 
     addCreds() {
-        this.store.dispatch(ActionSettingsChangeTg({ tgPassword: this.password, tgUsername: this.username, tgDefaultClientId: this.selectedClient }));
+        this.store.dispatch(ActionSettingsChangeTg({ tgPassword: this.password, tgUsername: this.username, tgDefaultProjectId: this.selectedProject }));
     }
 }

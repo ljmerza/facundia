@@ -9,11 +9,11 @@
 
                 <div class="d-flex justify-content-center">
                     <mat-form-field class='full-width'>
-                        <mat-label>Client</mat-label>
-                        <mat-select [(ngModel)]="selectedClient">
-                            <mat-option disabled>Please choose...</mat-option>
-                            <mat-option *ngFor="let client of clients" [value]="client.id">
-                                {{client.name}}
+                        <mat-label>Project</mat-label>
+                        <mat-select [(ngModel)]="selectedProject">
+                            <mat-option disabled></mat-option>
+                            <mat-option *ngFor="let project of projects" [value]="project.id">
+                                {{project.name}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>

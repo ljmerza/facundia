@@ -56,7 +56,7 @@ export const selectTgPassword = createSelector(
   (state: SettingsState) => state && state.tgPassword
 );
 
-export const selectTgDefaultClientId = createSelector(
+export const selectTgDefaultProjectId = createSelector(
   selectSettings,
-  (state: SettingsState) => state && state.tgDefaultClientId
+  (state: SettingsState) => state && state.tgDefaultProjectId
 );

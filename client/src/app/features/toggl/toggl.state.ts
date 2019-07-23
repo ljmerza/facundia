@@ -3,13 +3,14 @@ import {
     createFeatureSelector
 } from '@ngrx/store';
 
-import { ClientReducer, LoggerReducer } from './reducers';
-import { LoggerState, ClientsState } from './models';
+import { ClientsReducer, LoggerReducer, ProjectsReducer } from './reducers';
+import { LoggerState, ClientsState, ProjectsState } from './models';
 
 
 export const reducers: ActionReducerMap<TogglState> = {
     logger: LoggerReducer,
-    clients: ClientReducer,
+    clients: ClientsReducer,
+    projects: ProjectsReducer,
 };
 
 export const selectTogglState = createFeatureSelector<
@@ -20,4 +21,5 @@ export const selectTogglState = createFeatureSelector<
 export interface TogglState {
     logger: LoggerState;
     clients: ClientsState;
+    projects: ProjectsState;
 }

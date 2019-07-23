@@ -12,7 +12,7 @@ export const initialClientsState: ClientsState = {
     loading: false,
 };
 
-export const ClientReducer = createReducer(
+export const ClientsReducer = createReducer(
     initialClientsState,
     on(actionTogglGetClients, (state: ClientsState = initialClientsState) => ({ ...state, loading: true })),
     on(actionTogglGetClientsSuccess, (state: ClientsState = initialClientsState, payload) => ({ ...state, loading: false, data: payload.data })),

@@ -11,7 +11,7 @@ export interface SettingsState {
 	chUsername: string;
 	tgUsername: string;
 	tgPassword: string;
-	tgDefaultClientId: number;
+	tgDefaultProjectId: number;
 }
 
 export interface State extends CoreState {

@@ -12,7 +12,7 @@ export const initialState: SettingsState = {
   hour: 0,
   tgUsername: '',
   tgPassword: '',
-  tgDefaultClientId: 0,
+  tgDefaultProjectId: 0,
 };
 
 export const settingsReducer = createReducer(

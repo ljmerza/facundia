@@ -11,4 +11,4 @@ export const ActionSettingsChangeHour = createAction('[Settings] Change Hour', p
 export const ActionSettingsChangeChToken = createAction('[Settings] Change CH Token', props<{ chToken: string }>());
 export const ActionSettingsChangeChUsername = createAction('[Settings] Change CH Username', props<{ chUsername: string }>());
 
-export const ActionSettingsChangeTg = createAction('[Settings] Change TG', props<{ tgUsername: string, tgPassword: string, tgDefaultClientId: number  }>());
+export const ActionSettingsChangeTg = createAction('[Settings] Change TG', props<{ tgUsername: string, tgPassword: string, tgDefaultProjectId: number  }>());

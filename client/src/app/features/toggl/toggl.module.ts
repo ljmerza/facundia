@@ -10,11 +10,11 @@ import { EffectsModule } from '@ngrx/effects';
 import { TogglRoutingModule } from './toggl-routing.module';
 
 import {
-    LoggerService, ClientsService
+    LoggerService, ClientsService, ProjectsService
 } from './services';
 
 import {
-    LoggerEffects, ClientsEffects,
+    LoggerEffects, ClientsEffects, ProjectsEffects
 } from './effects';
 
 import {
@@ -35,11 +35,11 @@ import {
 
         StoreModule.forFeature('toggl', reducers),
         EffectsModule.forFeature([
-            LoggerEffects, ClientsEffects
+            LoggerEffects, ClientsEffects, ProjectsEffects
         ]),
     ],
     providers: [
-        LoggerService, ClientsService
+        LoggerService, ClientsService, ProjectsService
     ],
     declarations: [
         LogTimeComponent, LoginComponent
