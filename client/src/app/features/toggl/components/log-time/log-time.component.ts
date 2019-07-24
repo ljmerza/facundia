@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { ROUTE_ANIMATIONS_ELEMENTS, selectSettings } from '../../../../core';
 import { actionTogglGetProjects, actionTogglAddLogger } from '../../actions';
 import { selectProjects, selectLogger } from '../../selectors';
+import { LoggerInterface } from '../../models';
 
 
 @Component({
@@ -84,8 +85,9 @@ export class LogTimeComponent implements OnInit, OnDestroy  {
         const endOfLog = moment().startOf('day').add(hours, 'hours').add(minutes, 'minutes');
         const selectedClientWid = this.projects.find(client => client.id === this.selectedProject).wid;
 
-        const payload = {
+        const payload: LoggerInterface = {
             ...this.defaultPayload,
+            pid: this.selectedProject,
             description: this.description,
             duration: durationInSeconds,
             wid: selectedClientWid,

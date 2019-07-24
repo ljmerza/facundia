@@ -7,7 +7,8 @@ export interface LoggerInterface {
     duration: number
     start: string;
     stop: string;
-    wid: number
+    wid: number;
+    pid: number;
 }
 
 export interface LoggerState {
