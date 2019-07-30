@@ -200,7 +200,7 @@ export class StandUpComponent implements OnInit, OnDestroy {
      * @return {string}
      */
     private cardTextLine(card) {
-        return `-[${card.epic_id}] ${card.name}`;
+        return `- [${card.epic_id}] ${card.name}`;
     }
 
     public copyStandUp(){
