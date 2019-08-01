@@ -3,7 +3,7 @@ import * as path from 'path';
 import { ConfigService } from './config.service';
 
 
-const envFile = path.resolve(__dirname, '..', '..', 'env', `${process.env.NODE_ENV || 'development'}.env`);
+const envFile = path.resolve(__dirname, '..', '..', 'env', `.env`);
 
 
 @Module({
