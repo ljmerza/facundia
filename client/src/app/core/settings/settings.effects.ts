@@ -18,6 +18,7 @@ import { selectSettingsState } from '../core.state';
 import { LocalStorageService } from '../local-storage/local-storage.service';
 import { TitleService } from '../title/title.service';
 
+import { NotificationService } from '../notifications/notification.service';
 import * as settingsActions from './settings.actions';
 import { selectEffectiveTheme } from './settings.selectors';
 import { State } from './settings.model';
@@ -34,7 +35,8 @@ export class SettingsEffects {
 		private router: Router,
 		private overlayContainer: OverlayContainer,
 		private localStorageService: LocalStorageService,
-		private titleService: TitleService
+		private titleService: TitleService,
+		private notifications: NotificationService
 	) {}
 
 	@Effect()
@@ -56,7 +58,10 @@ export class SettingsEffects {
 			settingsActions.ActionSettingsChangeTg,
 		),
 		withLatestFrom(this.store.pipe(select(selectSettingsState))),
-		tap(([action, settings]) => this.localStorageService.setItem(SETTINGS_KEY, settings))
+		tap(([action, settings]) => {
+			this.notifications.success('Saved Settings');
+			this.localStorageService.setItem(SETTINGS_KEY, settings);
+		})
 	);
 
 	@Effect({ dispatch: false })

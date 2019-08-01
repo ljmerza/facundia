@@ -25,7 +25,11 @@ export class LoggerEffects {
         ofType(actionTogglAddLogger),
         switchMap(({log}) =>{
             return this.service.addLog(log).pipe(
-                map(response => actionTogglAddLoggerSuccess({ data: response }),
+                map(
+                    response => {
+                        this.notifications.success('Added log to toggl successfully');
+                        return actionTogglAddLoggerSuccess({ data: response });
+                    },
                     catchError(error => {
                         this.notifications.error(error);
                         return of(actionTogglAddLoggerError({ error }));
