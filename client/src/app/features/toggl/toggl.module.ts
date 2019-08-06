@@ -10,11 +10,11 @@ import { EffectsModule } from '@ngrx/effects';
 import { TogglRoutingModule } from './toggl-routing.module';
 
 import {
-    LoggerService, ClientsService, ProjectsService
+    LoggerService, ClientsService, ProjectsService, EntriesService
 } from './services';
 
 import {
-    LoggerEffects, ClientsEffects, ProjectsEffects
+    LoggerEffects, ClientsEffects, ProjectsEffects, EntriesEffects
 } from './effects';
 
 import {
@@ -22,7 +22,7 @@ import {
 } from './toggl.state';
 
 import {
-    LogTimeComponent, LoginComponent
+    LogTimeComponent, LoginComponent, EntriesComponent
 } from './components';
 
 
@@ -35,14 +35,16 @@ import {
 
         StoreModule.forFeature('toggl', reducers),
         EffectsModule.forFeature([
-            LoggerEffects, ClientsEffects, ProjectsEffects
+            LoggerEffects, ClientsEffects, 
+            ProjectsEffects, EntriesEffects
         ]),
     ],
     providers: [
-        LoggerService, ClientsService, ProjectsService
+        LoggerService, ClientsService, 
+        ProjectsService, EntriesService
     ],
     declarations: [
-        LogTimeComponent, LoginComponent
+        LogTimeComponent, LoginComponent, EntriesComponent
     ]
 })
 export class TogglModule { }

@@ -7,6 +7,7 @@ import { ProfileService, MemberInterface } from '../profile';
 import { ProjectService, ProjectInterface } from '../projects';
 import { WorkflowService, WorkflowStateInterface } from '../workflow';
 import { LabelService, LabelInterface } from '../label';
+import { IterationService, IterationInterface } from '../iteration';
 
 import { constants } from '../constants';
 
@@ -17,6 +18,7 @@ export class StandUpController {
 		private readonly projectService: ProjectService,
 		private readonly workflowService: WorkflowService,
 		private readonly labelService: LabelService,
+		private readonly iterationService: IterationService,
 	) {}
 
 	@Get('standup/:username')
@@ -25,10 +27,11 @@ export class StandUpController {
 			this.profileService.getProfiles(),
 			this.labelService.getLabels(),
 			this.projectService.getProjects(),
-			this.workflowService.getWorkflows()
+			this.workflowService.getWorkflows(),
+			this.iterationService.getIterations()
 		).pipe(
 			switchMap(data => {
-				const [profiles, labels, projects, workflows] = data;
+				const [profiles, labels, projects, workflows, iterations] = data;
 				const [workflow] = workflows;
 
 				const myProfile: MemberInterface = profiles.find(profile => profile.profile.mention_name === username);
@@ -44,7 +47,13 @@ export class StandUpController {
                             // find names for these ids
 							const projectStories = allStories[stories].map(story => {
 								const project: ProjectInterface = projects.find(project => project.id === story.project_id);
+								story.projectName = project.name;
+
 								const state: WorkflowStateInterface = workflow.states.find(state => state.id === story.workflow_state_id);
+								story.workflowName = state.name;
+
+								const iteration: IterationInterface = iterations.find(iteration => iteration.id === story.iteration_id);
+								story.iterationName = (iteration && iteration.name) || '';
 
                                 story.labels = story.labels.map(storyLabel => {
                                     const matchingLabel: LabelInterface = labels.find(label => label.id === storyLabel.id);
@@ -52,24 +61,24 @@ export class StandUpController {
                                     return storyLabel;
                                 });
 
-								story.projectName = project.name;
-								story.workflowName = state.name;
 								return story;
-							});
+							}).filter(story => !story.archived); // remove all archived cards
 
                             // group stories together by type needed
 							const myStories = projectStories.filter(story => story.owner_ids.includes(myProfile.id));
 							const myStoriesInDev = myStories.filter(story => story.workflow_state_id === constants.workflows.inDevId);
-							const myStoriesInReview = myStories.filter(story => story.workflow_state_id === constants.workflows.inReviewId);
-							const myStoriesDeployed = myStories.filter(story => story.workflow_state_id === constants.workflows.deployedId);
-							const readyForDev = projectStories.filter(story => story.workflow_state_id === constants.workflows.readyForDevId);
+
+							const backendStories = projectStories.filter(story => story.projectName === 'API');
+							
+							const frontendStories= projectStories.filter(story => story.projectName !== 'API');
+							const readyForDev = frontendStories.filter(story => story.workflow_state_id === constants.workflows.readyForDevId);
 
 							return {
 								myStories,
 								readyForDev,
 								myStoriesInDev,
-								myStoriesInReview,
-								myStoriesDeployed,
+								frontendStories,
+								backendStories,
 							};
 						});
 
@@ -77,8 +86,8 @@ export class StandUpController {
 							myStories: [],
 							readyForDev: [],
 							myStoriesInDev: [],
-							myStoriesInReview: [],
-							myStoriesDeployed: [],
+							frontendStories: [],
+							backendStories: [],
 						};
 
 						// merge all organized projects
@@ -86,8 +95,8 @@ export class StandUpController {
 							acc.myStories.push(...project.myStories);
 							acc.readyForDev.push(...project.readyForDev);
 							acc.myStoriesInDev.push(...project.myStoriesInDev);
-							acc.myStoriesInReview.push(...project.myStoriesInReview);
-							acc.myStoriesDeployed.push(...project.myStoriesDeployed);
+							acc.frontendStories.push(...project.frontendStories);
+							acc.backendStories.push(...project.backendStories);
 							return acc;
 						}, organizedProject);
 

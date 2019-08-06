@@ -8,6 +8,6 @@ export interface StandUpOrganizedProject {
   myStories: any,
   readyForDev: any,
   myStoriesInDev: any,
-  myStoriesInReview: any,
-  myStoriesDeployed: any,
+  backendStories: any,
+  frontendStories: any,
 }

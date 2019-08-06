@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import {
     ProfileModule, ProjectModule,
     StoryModule, StandUpModule,
-    WorkflowModule
+    WorkflowModule, IterationModule,
 } from './';
 
 
@@ -14,13 +14,15 @@ import {
         StoryModule,
         StandUpModule,
         WorkflowModule,
+        IterationModule
     ],
     exports: [
         ProfileModule,
         ProjectModule,
         StoryModule,
         StandUpModule,
-        WorkflowModule
+        WorkflowModule,
+        IterationModule,
     ]
 })
 export class ClubhouseModule { }

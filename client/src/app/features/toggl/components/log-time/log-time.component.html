@@ -33,3 +33,10 @@
         </mat-card>
     </div>
 </div>
+
+<div *ngIf='!loadingAddLog && !loading' class="d-flex justify-content-center entries">
+    <div class="col-sm-12">
+        <kp-tg-entries [projects]=projects></kp-tg-entries>
+    </div>
+</div>
+

@@ -22,6 +22,7 @@ export class LogTimeComponent implements OnInit, OnDestroy  {
     addLog$: Subscription;
     
     loading: boolean = false;
+    loadingAddLog: boolean = false;
     
     projects$: Subscription;
     projects;
@@ -66,7 +67,7 @@ export class LogTimeComponent implements OnInit, OnDestroy  {
         
         this.addLog$ = this.store.pipe(select(selectLogger))
             .subscribe(logger => {
-                console.log({ logger });
+                this.loadingAddLog = logger.loading;
             });
     }
 
@@ -85,7 +86,7 @@ export class LogTimeComponent implements OnInit, OnDestroy  {
         const endOfLog = moment().startOf('day').add(hours, 'hours').add(minutes, 'minutes');
         const selectedClientWid = this.projects.find(client => client.id === this.selectedProject).wid;
 
-        const payload: LoggerInterface = {
+        const log: LoggerInterface = {
             ...this.defaultPayload,
             pid: this.selectedProject,
             description: this.description,
@@ -95,7 +96,14 @@ export class LogTimeComponent implements OnInit, OnDestroy  {
             stop: (endOfLog.format(this.timeLogFormat) + this.timeZone),
         };
 
-        if (!payload.description || !payload.duration) return;
-        this.store.dispatch(actionTogglAddLogger({log: payload}));
+        if (!log.description || !log.duration) return;
+        
+        this.resetLog();
+        this.store.dispatch(actionTogglAddLogger({ log }));
+    }
+
+    private resetLog() {
+        this.logTime = { hour: 8, minute: 0 };
+        this.description = '';
     }
 }

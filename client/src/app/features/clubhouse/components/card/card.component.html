@@ -20,8 +20,11 @@
             'btn-danger': card._internal.blockChecked
             }">Blocked</button>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-6 card-info">
         <a href="https://app.clubhouse.io/revvkapok/story/{{card.id}}" target="_blank">[{{card.id}}]</a> - {{card.name}}
+        <mat-chip-list>
+            <mat-chip *ngIf="card.iterationName" color="primary" selected>{{card.iterationName}}</mat-chip>
+        </mat-chip-list>
     </div>
     <div class="col-sm-2">
         {{card.updated_at | amDateFormat: 'MM/D h:mm A'}}

@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
 
     ngOnDestroy() {
         if (this.settings$) this.settings$.unsubscribe();
+        if (this.projects$) this.projects$.unsubscribe();
     }
 
     addCreds() {

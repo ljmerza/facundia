@@ -55,11 +55,17 @@ export class StandUpComponent implements OnInit, OnDestroy {
         
         // add internal props such as checked and filter out API/archived based cards
         let inDevCards = standUp.data.mergedProjects.myStoriesInDev
-            .map(this.addCardInternalProps)
-            .filter(this.filterUnneededCards);
+            .map(this.addCardInternalProps);
+
         let readyForDevCards = standUp.data.mergedProjects.readyForDev
-            .map(this.addCardInternalProps)
-            .filter(this.filterUnneededCards);
+            .map(this.addCardInternalProps);
+
+        let backendCards = standUp.data.mergedProjects.backendStories
+            .map(this.addCardInternalProps);
+
+        let frontEndBacklog = standUp.data.mergedProjects.frontendStories
+            .filter(card => card.workflowName === 'Backlog')
+            .map(this.addCardInternalProps);
 
         // get yesterday's date to sort last modded stories
         // if yeterday was sunday then 'yesterday' is actually friday
@@ -70,7 +76,7 @@ export class StandUpComponent implements OnInit, OnDestroy {
 
         // sort stories by last updated by yesterday and the rest
         let yesterdayWork = [];
-        let restOfWork = [];
+        let restOfMyWork = [];
         standUp.data.mergedProjects.myStories
             .map(this.addCardInternalProps)
             .forEach(story => {
@@ -80,19 +86,20 @@ export class StandUpComponent implements OnInit, OnDestroy {
                 if(storyDate.isAfter(yesterday)){
                     yesterdayWork.push(story);
                 } else {
-                    restOfWork.push(story);
+                    restOfMyWork.push(story);
                 }
             });
 
-
         // sort by last updated
         yesterdayWork.sort(this.sortByUpdatedDate);
-        restOfWork.sort(this.sortByUpdatedDate);
+        restOfMyWork.sort(this.sortByUpdatedDate);
         inDevCards.sort(this.sortByUpdatedDate);
         readyForDevCards.sort(this.sortByUpdatedDate);
+        backendCards.sort(this.sortByUpdatedDate);
+        frontEndBacklog.sort(this.sortByUpdatedDate);
         
         // update UI
-        this.standUp = { yesterdayWork, restOfWork, inDevCards, readyForDevCards };
+        this.standUp = { yesterdayWork, restOfMyWork, inDevCards, readyForDevCards, backendCards, frontEndBacklog };
         this.yesterday = yesterday;
         this.loading = standUp.loading;
     }
