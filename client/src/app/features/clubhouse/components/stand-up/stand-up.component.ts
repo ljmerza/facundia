@@ -149,9 +149,11 @@ export class StandUpComponent implements OnInit, OnDestroy {
 
         // for each list, filter checked cards into their respective array above
         this.standUp.yesterdayWork.forEach(card => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
-        this.standUp.restOfWork.forEach(card => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
         this.standUp.inDevCards.forEach(card => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
         this.standUp.readyForDevCards.forEach(card => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
+        this.standUp.backendCards.forEach(card => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
+        this.standUp.frontEndBacklog.forEach(card => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
+        this.standUp.restOfMyWork.forEach(card => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
 
         // build yesterday's list
         let standUpText = '\nYesterday:\n';

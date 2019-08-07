@@ -19,6 +19,15 @@ export class EntriesComponent implements OnInit, OnDestroy {
 
     @Input() projects;
 
+    calendarFormat = {
+        sameDay: '[Today]',
+        nextDay: '[Tomorrow]',
+        nextWeek: 'dddd',
+        lastDay: '[Yesterday]',
+        lastWeek: '[Last] dddd',
+        sameElse: 'DD/MM/YYYY'
+    }
+
 
     displayedColumns: string[] = ['at', 'duration', 'description', 'pidName'];
 
@@ -29,14 +38,18 @@ export class EntriesComponent implements OnInit, OnDestroy {
 
         // try to get entries list
         this.entries$ = this.store.pipe(select(selectEntries)).subscribe(entries => {
-            console.log({ projects: this.projects, e: entries.data })
-            this.entries = (entries.data || []).map(this.mapPidToProject.bind(this));
+            this.entries = (entries.data || []).map(this.formatEntry.bind(this));
             this.loading = entries.loading;
         });
     }
 
-    private mapPidToProject(entry) {
+    private formatEntry(entry) {
         entry.pidName = (this.projects.find(project => project.id === entry.pid) || {}).name || '';
+
+        const hours = (entry.duration / 3600).toFixed(0);
+        const minutes:any = ((entry.duration % 3600) / 60).toFixed(0);
+        entry.duration = `${hours}:${(minutes <= 9) ? 0 : ''}${minutes}`;
+
         return entry;
     }
 
