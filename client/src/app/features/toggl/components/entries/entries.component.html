@@ -1,5 +1,7 @@
 
 <kd-loading [loading]=loading>
+    <kp-tg-week-time [entries]=entries></kp-tg-week-time>
+
     <table *ngIf='!loading' mat-table [dataSource]="entries" class="mat-elevation-z8">
     
         <ng-container matColumnDef="at">
@@ -9,7 +11,7 @@
     
         <ng-container matColumnDef="duration">
             <th mat-header-cell *matHeaderCellDef> Duration </th>
-            <td mat-cell *matCellDef="let entry"> {{entry.duration}} </td>
+            <td mat-cell *matCellDef="let entry"> {{entry.durationHours}} </td>
         </ng-container>
     
         <ng-container matColumnDef="description">

@@ -22,7 +22,8 @@ import {
 } from './toggl.state';
 
 import {
-    LogTimeComponent, LoginComponent, EntriesComponent
+    LogTimeComponent, LoginComponent, 
+    EntriesComponent, WeekTimeComponent,
 } from './components';
 
 
@@ -44,7 +45,8 @@ import {
         ProjectsService, EntriesService
     ],
     declarations: [
-        LogTimeComponent, LoginComponent, EntriesComponent
+        LogTimeComponent, LoginComponent,
+        EntriesComponent, WeekTimeComponent,
     ]
 })
 export class TogglModule { }

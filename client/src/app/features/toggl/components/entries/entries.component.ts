@@ -6,6 +6,7 @@ import { CoreState } from '../../../../core';
 import { selectEntries } from '../../selectors';
 import { actionTogglGetEntries } from '../../actions';
 
+import { secondsToHm } from '../../tools';
 
 @Component({
     selector: 'kp-tg-entries',
@@ -28,12 +29,19 @@ export class EntriesComponent implements OnInit, OnDestroy {
         sameElse: 'DD/MM/YYYY'
     }
 
-
     displayedColumns: string[] = ['at', 'duration', 'description', 'pidName'];
 
     constructor(public store: Store<CoreState>) { }
 
     ngOnInit() {
+        this.fetchEntries();
+    }
+
+    ngOnDestroy() {
+        if (this.entries$) this.entries$.unsubscribe();
+    }
+
+    private fetchEntries() {
         this.store.dispatch(actionTogglGetEntries());
 
         // try to get entries list
@@ -45,15 +53,7 @@ export class EntriesComponent implements OnInit, OnDestroy {
 
     private formatEntry(entry) {
         entry.pidName = (this.projects.find(project => project.id === entry.pid) || {}).name || '';
-
-        const hours = (entry.duration / 3600).toFixed(0);
-        const minutes:any = ((entry.duration % 3600) / 60).toFixed(0);
-        entry.duration = `${hours}:${(minutes <= 9) ? 0 : ''}${minutes}`;
-
+        entry.durationHours = secondsToHm(entry.duration);
         return entry;
-    }
-
-    ngOnDestroy() {
-        if (this.entries$) this.entries$.unsubscribe();
     }
 }

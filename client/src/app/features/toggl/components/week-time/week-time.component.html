@@ -1,0 +1,15 @@
+
+
+<mat-card>
+    <div class="d-flex">
+        <div class="col-sm-4">
+            Time worked this week: {{weekTimeWorked}}
+        </div>
+        <div class="col-sm-4">
+            Time left this week: {{weekTimeLeftToWork}}
+        </div>
+        <div class="col-sm-4" *ngIf='timeCanLeave'>
+            Leave on Friday at: {{timeCanLeave}}
+        </div>
+    </div>
+</mat-card>
