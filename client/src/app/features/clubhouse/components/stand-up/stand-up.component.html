@@ -43,46 +43,59 @@
           </span>
         </div>
       </mat-expansion-panel>
+
+      <mat-expansion-panel class='border' *ngFor="let sprintCards of standUp?.iterationGroups | keyvalue">
+        <mat-expansion-panel-header class='border'>
+          <mat-panel-title>
+            <h3>{{sprintCards.key}}</h3>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class='pt-3'>
+          <span *ngFor="let card of sprintCards.value" (click)="toggleCard($event, card)">
+            <kp-ch-card [card]=card></kp-ch-card>
+          </span>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class='border'>
+        <mat-expansion-panel-header class='border'>
+          <mat-panel-title>
+            <h3>Frontend Backlog</h3>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class='pt-3'>
+          <span *ngFor="let card of standUp?.frontEndBacklog" (click)="toggleCard($event, card)">
+            <kp-ch-card [card]=card></kp-ch-card>
+          </span>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class='border'>
+        <mat-expansion-panel-header class='border'>
+          <mat-panel-title>
+            <h3>Backend</h3>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class='pt-3'>
+          <span *ngFor="let card of standUp?.backendCards" (click)="toggleCard($event, card)">
+            <kp-ch-card [card]=card></kp-ch-card>
+          </span>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class='border'>
+        <mat-expansion-panel-header class='border'>
+          <mat-panel-title>
+            <h3>Rest of My Work</h3>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class='pt-3'>
+          <span *ngFor="let card of standUp?.restOfMyWork" (click)="toggleCard($event, card)">
+            <kp-ch-card [card]=card></kp-ch-card>
+          </span>
+        </div>
+      </mat-expansion-panel>
     </mat-accordion>
-
-    <mat-expansion-panel class='border'>
-      <mat-expansion-panel-header class='border'>
-        <mat-panel-title>
-          <h3>Backend</h3>
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div class='pt-3'>
-        <span *ngFor="let card of standUp?.backendCards" (click)="toggleCard($event, card)">
-          <kp-ch-card [card]=card></kp-ch-card>
-        </span>
-      </div>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel class='border'>
-      <mat-expansion-panel-header class='border'>
-        <mat-panel-title>
-          <h3>Frontend Backlog</h3>
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div class='pt-3'>
-        <span *ngFor="let card of standUp?.frontEndBacklog" (click)="toggleCard($event, card)">
-          <kp-ch-card [card]=card></kp-ch-card>
-        </span>
-      </div>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel class='border'>
-      <mat-expansion-panel-header class='border'>
-        <mat-panel-title>
-          <h3>Rest of My Work</h3>
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div class='pt-3'>
-        <span *ngFor="let card of standUp?.restOfMyWork" (click)="toggleCard($event, card)">
-          <kp-ch-card [card]=card></kp-ch-card>
-        </span>
-      </div>
-    </mat-expansion-panel>
 
     <form class="stand-up-form mt-3 border">
       <mat-form-field class="full-width">

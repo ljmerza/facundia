@@ -90,6 +90,21 @@ export class StandUpComponent implements OnInit, OnDestroy {
                 }
             });
 
+        console.log(standUp.data)
+
+        // group by sprint (iteration name)
+        const ignoredWorkFlows = ['Deployed', 'Ready for Deploy'];
+        const iterationGroups = standUp.data.mergedProjects.frontendStories
+            .map(this.addCardInternalProps)
+            .reduce((acc, curr) => {
+                if (!curr.iterationName) curr.iterationName = 'No Sprint';
+                if (ignoredWorkFlows.includes(curr.workflowName)) return acc;
+
+                if (!acc[curr.iterationName]) acc[curr.iterationName] = [];
+                acc[curr.iterationName].push(curr);
+                return acc;
+            }, {});
+
         // sort by last updated
         yesterdayWork.sort(this.sortByUpdatedDate);
         restOfMyWork.sort(this.sortByUpdatedDate);
@@ -99,7 +114,7 @@ export class StandUpComponent implements OnInit, OnDestroy {
         frontEndBacklog.sort(this.sortByUpdatedDate);
         
         // update UI
-        this.standUp = { yesterdayWork, restOfMyWork, inDevCards, readyForDevCards, backendCards, frontEndBacklog };
+        this.standUp = { iterationGroups, yesterdayWork, restOfMyWork, inDevCards, readyForDevCards, backendCards, frontEndBacklog };
         this.yesterday = yesterday;
         this.loading = standUp.loading;
     }
