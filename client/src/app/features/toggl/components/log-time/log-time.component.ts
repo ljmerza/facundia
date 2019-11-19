@@ -33,6 +33,8 @@ export class LogTimeComponent implements OnInit, OnDestroy  {
     hourStep = 1;
     minuteStep = 15;
 
+    offsetHours = 2;
+
     defaultPayload = {
         "billable": true,
         "created_with": "Snowball",
@@ -82,8 +84,10 @@ export class LogTimeComponent implements OnInit, OnDestroy  {
         const minutes = this.logTime.minute;
         const durationInSeconds = (hours*60*60) + (minutes*60);
 
-        const startOfLog = moment().startOf('day');
-        const endOfLog = moment().startOf('day').add(hours, 'hours').add(minutes, 'minutes');
+
+        // add offsetHours to make sure we dont hit day light savings
+        const startOfLog = moment().startOf('day').add(this.offsetHours, 'hours');
+        const endOfLog = moment().startOf('day').add(this.offsetHours+ hours, 'hours').add(minutes, 'minutes');
         const selectedClientWid = this.projects.find(client => client.id === this.selectedProject).wid;
 
         const log: LoggerInterface = {
