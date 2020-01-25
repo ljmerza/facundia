@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  facundia:
+    image: node:10.18.1
+    container_name: facundia
+    restart: unless-stopped
+    volumes:
+      - ./volumes/facundia:/usr/src/app
+    ports:
+      - 8080:8080
+    command: "/bin/sh -c 'cd /usr/src/app/server; npm install; cd /usr/src/app/server; npm install; npm run start:prod'"
