@@ -5,8 +5,15 @@ services:
     image: node:10.18.1
     container_name: facundia
     restart: unless-stopped
+    network_mode: host
     volumes:
-      - ./volumes/facundia:/usr/src/app
+      - ./volumes:/usr/src/app
+    command: "/bin/sh -c 'cd /usr/src/app/server; npm ci; cd /usr/src/app/server; npm ci; npm run start:prod'"
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: unless-stopped
     ports:
-      - 8080:8080
-    command: "/bin/sh -c 'cd /usr/src/app/server; npm install; cd /usr/src/app/server; npm install; npm run start:prod'"
+      - 80:80
+    volumes:
+      - ./volumes/client/dist:/var/www/html
