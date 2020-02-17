@@ -10,7 +10,7 @@
         <div class="col-12 signature">
           &#169; <span class="year" data-testid="footer-year">{{year}}</span> - Leonardo Merza
           <br class="d-block d-sm-none">
-          <fa-icon icon="rocket"></fa-icon> {{version}} <span *ngIf="!isProd">[{{envName}}]</span>
+          <fa-icon [icon]="faRocket"></fa-icon> {{version}} <span *ngIf="!isProd">[{{envName}}]</span>
         </div>
       </div>
     </div>
