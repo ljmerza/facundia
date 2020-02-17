@@ -3,12 +3,12 @@ import {
     createFeatureSelector
 } from '@ngrx/store';
 
-import { StandUpReducer } from './reducers';
+import { standUpReducer } from './reducers';
 import { StandUpState } from './models';
 
 
 export const reducers: ActionReducerMap<ClubhouseState> = {
-    standUp: StandUpReducer,
+    standUp: standUpReducer,
 };
 
 export const selectClubhouseState = createFeatureSelector<

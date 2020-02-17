@@ -15,7 +15,7 @@ export const initialState: SettingsState = {
   tgDefaultProjectId: 0,
 };
 
-export const settingsReducer = createReducer(
+const _settingsReducer = createReducer(
   initialState,
   on(
     settingsActions.ActionSettingsChangeTheme,
@@ -29,3 +29,7 @@ export const settingsReducer = createReducer(
     }
   )
 );
+
+export function settingsReducer(state: SettingsState, action: any) {
+  return _settingsReducer(state, action);
+}
