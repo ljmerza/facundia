@@ -34,10 +34,9 @@ export class LogTimeComponent implements OnInit, OnDestroy  {
     logTime = { hour: 8, minute: 0 };
     hourStep = 1;
     minuteStep = 15;
-    
-    offsetHours = 0;
+
     timeLogFormat = 'YYYY-MM-DDTHH:mm:ss';
-    timeZone = '00:00';
+    timeZone = '-04:00';
 
     defaultPayload = {
         "billable": true,
@@ -84,10 +83,9 @@ export class LogTimeComponent implements OnInit, OnDestroy  {
         const minutes = this.logTime.minute;
         const durationInSeconds = (hours*60*60) + (minutes*60);
 
-
-        // add offsetHours to make sure we dont hit day light savings
-        const startOfLog = moment().startOf('day').add(this.offsetHours, 'hours');
-        const endOfLog = moment().startOf('day').add(this.offsetHours+ hours, 'hours').add(minutes, 'minutes');
+        // start at 8am
+        const startOfLog = moment().startOf('day').add(8, 'hours');
+        const endOfLog = startOfLog.clone().add(hours, 'hours').add(minutes, 'minutes');
         const selectedClientWid = this.projects.find(client => client.id === this.selectedProject).wid;
 
         const log: LoggerInterface = {
@@ -96,11 +94,11 @@ export class LogTimeComponent implements OnInit, OnDestroy  {
             description: this.description,
             duration: durationInSeconds,
             wid: selectedClientWid,
-            start: (startOfLog.format(this.timeLogFormat) + this.timeZone),
-            stop: (endOfLog.format(this.timeLogFormat) + this.timeZone),
+            start: `${startOfLog.format(this.timeLogFormat)}${this.timeZone}`,
+            stop: `${endOfLog.format(this.timeLogFormat)}${this.timeZone}`,
         };
 
-        if (!log.description || !log.duration) return;
+        if (!log.description || !log.duration || !log.wid) return;
         
         this.resetLog();
         this.store.dispatch(actionTogglAddLogger({ log }));

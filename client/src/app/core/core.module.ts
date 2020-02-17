@@ -20,18 +20,21 @@ import {
   metaReducers,
   selectRouterState
 } from './core.state';
+
+import { CustomSerializer } from './router/custom-serializer';
+
 import { TitleService } from './title/title.service';
 import { AppErrorHandler } from './error-handler/app-error-handler.service';
-import { CustomSerializer } from './router/custom-serializer';
 import { LocalStorageService } from './local-storage/local-storage.service';
-import { HttpErrorInterceptor } from './http-interceptors/http-error.interceptor';
 import { NotificationService } from './notifications/notification.service';
-import { SettingsEffects } from './settings/settings.effects';
-import {
-  selectEffectiveTheme,
-} from './settings/settings.selectors';
-
 import { AnimationsService } from './animations/animations.service';
+
+import { HttpErrorInterceptor } from './http-interceptors/http-error.interceptor';
+import { APIInterceptor } from './http-interceptors/api.interceptor';
+
+import { SettingsEffects } from './settings/settings.effects';
+import { selectEffectiveTheme } from './settings/settings.selectors';
+
 
 import {
   ROUTE_ANIMATIONS_ELEMENTS,
@@ -74,6 +77,7 @@ export {
   declarations: [],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: APIInterceptor, multi: true },
     { provide: ErrorHandler, useClass: AppErrorHandler },
     { provide: RouterStateSerializer, useClass: CustomSerializer }
   ],
