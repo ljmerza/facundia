@@ -23,26 +23,26 @@ export class LogTimeComponent implements OnInit, OnDestroy  {
     
     loading: boolean = false;
     loadingAddLog: boolean = false;
+    loadedSettings: boolean = false;
     
     projects$: Subscription;
     projects;
     selectedProject: number;
 
     description = '';
+
     logTime = { hour: 8, minute: 0 };
     hourStep = 1;
     minuteStep = 15;
-
-    offsetHours = 2;
+    
+    offsetHours = 0;
+    timeLogFormat = 'YYYY-MM-DDTHH:mm:ss';
+    timeZone = '00:00';
 
     defaultPayload = {
         "billable": true,
         "created_with": "Snowball",
     };
-
-    timeLogFormat = 'YYYY-MM-DDTHH:mm:ss';
-    timeZone = '-04:00';
-    loadedSettings = false;
 
     constructor(public store: Store<any>, private router: Router) { }
 
