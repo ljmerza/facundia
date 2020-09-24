@@ -9,15 +9,18 @@ import { selectSettings, SettingsState } from './../../../core/settings';
 
 @Injectable()
 export class EntriesService {
-    private unsubscribe$: Subject<void> = new Subject<void>();
-    settings: SettingsState;
+	private unsubscribe$: Subject<void> = new Subject<void>();
+	settings: SettingsState;
 
-    constructor(private httpClient: HttpClient, private store: Store<{}>) {
-        store.pipe(select(selectSettings), takeUntil(this.unsubscribe$)).subscribe(settings => this.settings = settings);
-    }
+	constructor(private httpClient: HttpClient, private store: Store<{}>) {
+		store.pipe(select(selectSettings), takeUntil(this.unsubscribe$)).subscribe((settings) => (this.settings = settings));
+	}
 
-    getEntries(): Observable<any> {
-        const authKey = window.btoa(`${this.settings.tgUsername}:${this.settings.tgPassword}`);
-        return this.httpClient.get(`api/toggle/entries?authKey=${authKey}`);
-    }
+	getEntries(): Observable<any> {
+		return this.httpClient.get(`api/toggl/entries`, {
+			headers: {
+				Authorization: `Basic ${this.settings.tgToken}`,
+			},
+		});
+	}
 }

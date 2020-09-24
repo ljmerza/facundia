@@ -1,9 +1,17 @@
-
 .card-info {
-    display: flex;
-    align-items: center;
+	display: flex;
+	justify-content: space-between;
 
-    .mat-chip-list {
-        margin-left: 10px;
-    }
+	.card-info-details {
+		div {
+			margin-top: 5px;
+		}
+	}
+
+	.mat-chip-list {
+		.mat-standard-chip {
+			height: inherit;
+			text-align: center;
+		}
+	}
 }

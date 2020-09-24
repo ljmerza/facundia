@@ -10,6 +10,6 @@ export class ProjectsService {
 	constructor(private readonly apiService: TogglApiService) {}
 
 	getProjects(authKey: string): Observable<ProjectInterface[]> {
-		return this.apiService.getData('me/projects', authKey).pipe(map(response => response.data));
+		return this.apiService.getData('me?with_related_data=true', authKey).pipe(map(response => response.data.data.projects));
 	}
 }

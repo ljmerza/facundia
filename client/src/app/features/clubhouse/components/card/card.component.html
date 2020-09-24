@@ -1,32 +1,53 @@
 <div class="row pt-1">
-    <div class="col-sm-1">
-        <button type="button" name='yesterdayChecked' [ngClass]="{
-            'btn btn-sm': true,
-            'btn-primary': !card._internal.yesterdayChecked,
-            'btn-danger': card._internal.yesterdayChecked
-            }">Yesterday</button>
-    </div>
-    <div class="col-sm-1">
-        <button type="button" name='todayChecked' [ngClass]="{
-            'btn btn-sm': true,
-            'btn-primary': !card._internal.todayChecked,
-            'btn-danger': card._internal.todayChecked
-            }">Today</button>
-    </div>
-    <div class="col-sm-2">
-        <button type="button" name='blockChecked' [ngClass]="{
-            'btn btn-sm': true,
-            'btn-primary': !card._internal.blockChecked,
-            'btn-danger': card._internal.blockChecked
-            }">Blocked</button>
-    </div>
-    <div class="col-sm-6 card-info">
-        <a href="https://app.clubhouse.io/revvkapok/story/{{card.id}}" target="_blank">[{{card.id}}]</a> - {{card.name}}
-        <mat-chip-list>
-            <mat-chip *ngIf="card.iterationName" color="primary" selected>{{card.iterationName}}</mat-chip>
-        </mat-chip-list>
-    </div>
-    <div class="col-sm-2">
-        {{card.updated_at | amDateFormat: 'MM/D h:mm A'}}
-    </div>
+	<div class="col-sm-1">
+		<button
+			type="button"
+			name="yesterdayChecked"
+			[ngClass]="{
+				'btn btn-sm': true,
+				'btn-primary': !card._internal.yesterdayChecked,
+				'btn-danger': card._internal.yesterdayChecked
+			}"
+		>
+			Yesterday
+		</button>
+	</div>
+	<div class="col-sm-1">
+		<button
+			type="button"
+			name="todayChecked"
+			[ngClass]="{
+				'btn btn-sm': true,
+				'btn-primary': !card._internal.todayChecked,
+				'btn-danger': card._internal.todayChecked
+			}"
+		>
+			Today
+		</button>
+	</div>
+	<div class="col-sm-2">
+		<button
+			type="button"
+			name="blockChecked"
+			[ngClass]="{
+				'btn btn-sm': true,
+				'btn-primary': !card._internal.blockChecked,
+				'btn-danger': card._internal.blockChecked
+			}"
+		>
+			Blocked
+		</button>
+	</div>
+	<div class="col-sm-6 card-info">
+		<div class="card-info-details">
+			<a href="https://app.clubhouse.io/revvkapok/story/{{ card.id }}" target="_blank">[{{ card.id }}]</a>
+			<div>{{ card.name }}</div>
+		</div>
+		<mat-chip-list>
+			<mat-chip *ngIf="card.iterationName" color="primary" selected>{{ card.iterationName }}</mat-chip>
+		</mat-chip-list>
+	</div>
+	<div class="col-sm-2">
+		{{ card.updated_at | amDateFormat: 'MM/D h:mm A' }}
+	</div>
 </div>

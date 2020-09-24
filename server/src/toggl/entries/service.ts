@@ -10,6 +10,6 @@ export class EntriesService {
 	constructor(private readonly apiService: TogglApiService) {}
 
 	getEntries(authKey: string): Observable<EntriesInterface[]> {
-		return this.apiService.getData('me/time_entries', authKey).pipe(map(response => response.data));
+		return this.apiService.getData('me?with_related_data=true', authKey).pipe(map(response => response.data.data.time_entries));
 	}
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
@@ -10,240 +10,226 @@ import { StandUpState } from '../../models';
 import { actionClubhouseGetStandUp } from '../../actions';
 import { selectStandUp } from '../../selectors';
 
-
 @Component({
-    selector: 'kp-ch-stand-up',
-    templateUrl: './stand-up.component.html',
-    styleUrls: ['./stand-up.component.scss']
+	selector: 'kp-ch-stand-up',
+	templateUrl: './stand-up.component.html',
+	styleUrls: ['./stand-up.component.scss'],
 })
 export class StandUpComponent implements OnInit, OnDestroy {
-    routeAnimationsElements = ROUTE_ANIMATIONS_ELEMENTS;
+	routeAnimationsElements = ROUTE_ANIMATIONS_ELEMENTS;
 
-    standUp$: Subscription;
-    username$: Subscription;
-    loading: boolean = false;
+	standUp$: Subscription;
+	username$: Subscription;
+	loading: boolean = false;
 
-    standUp;
-    standUpText: string;
-    yesterday;
+	standUp;
+	standUpText: string;
+	yesterday;
 
-    constructor(public store: Store<any>, private router: Router) { }
+	constructor(public store: Store<any>, private router: Router) {}
 
+	ngOnInit() {
+		this.username$ = this.store.pipe(select(selectChUsername)).subscribe((chUsername) => {
+			// if no username then go to login page else get stand up data
+			if (!chUsername) {
+				this.router.navigate(['/clubhouse/login']);
+				return;
+			}
 
-    ngOnInit() {
-        this.username$ = this.store.pipe(select(selectChUsername))
-            .subscribe(chUsername => {
-                // if no username then go to login page else get stand up data
-                if (!chUsername) {
-                    this.router.navigate(['/clubhouse/login']);
-                    return;
-                }
-                
-                this.loading = true;
-                this.standUp$ = this.store.pipe(select(selectStandUp)).subscribe(this.processStandUpData.bind(this));
-                this.store.dispatch(actionClubhouseGetStandUp({ username: chUsername }));
-            });
-    }
+			this.loading = true;
+			this.standUp$ = this.store.pipe(select(selectStandUp)).subscribe(this.processStandUpData.bind(this));
+			this.store.dispatch(actionClubhouseGetStandUp({ username: chUsername }));
+		});
+	}
 
-    ngOnDestroy(){
-        if (this.standUp$) this.standUp$.unsubscribe();
-        if (this.username$) this.username$.unsubscribe();
-    }
+	ngOnDestroy() {
+		if (this.standUp$) this.standUp$.unsubscribe();
+		if (this.username$) this.username$.unsubscribe();
+	}
 
-    private processStandUpData(standUp) {
-        if (standUp.loading || !standUp.data) return;
-        
-        // add internal props such as checked and filter out API/archived based cards
-        let inDevCards = standUp.data.mergedProjects.myStoriesInDev
-            .map(this.addCardInternalProps);
+	private processStandUpData(standUp) {
+		if (standUp.loading || !standUp.data) return;
 
-        let readyForDevCards = standUp.data.mergedProjects.readyForDev
-            .map(this.addCardInternalProps);
+		// add internal props such as checked and filter out API/archived based cards
+		let inDevCards = standUp.data.mergedProjects.myStoriesInDev.map(this.addCardInternalProps);
 
-        let backendCards = standUp.data.mergedProjects.backendStories
-            .map(this.addCardInternalProps);
+		let readyForDevCards = standUp.data.mergedProjects.readyForDev.map(this.addCardInternalProps);
 
-        let frontEndBacklog = standUp.data.mergedProjects.frontendStories
-            .filter(card => card.workflowName === 'Backlog')
-            .map(this.addCardInternalProps);
+		let backendCards = standUp.data.mergedProjects.backendStories.map(this.addCardInternalProps);
 
-        // get yesterday's date to sort last modded stories
-        // if yeterday was sunday then 'yesterday' is actually friday
-        let yesterday = moment().subtract(1, 'days').startOf('day');
-        if (yesterday.day() === 0){
-            yesterday = yesterday.subtract(2, 'days');
-        }
+		let frontEndBacklog = standUp.data.mergedProjects.frontendStories
+			.filter((card) => card.workflowName === 'Backlog')
+			.map(this.addCardInternalProps);
 
-        // sort stories by last updated by yesterday and the rest
-        let yesterdayWork = [];
-        let restOfMyWork = [];
-        standUp.data.mergedProjects.myStories
-            .map(this.addCardInternalProps)
-            .forEach(story => {
-            
-                // seperate my work by yesterday's work and everything else
-                const storyDate = moment(new Date(story.updated_at));
-                if(storyDate.isAfter(yesterday)){
-                    yesterdayWork.push(story);
-                } else {
-                    restOfMyWork.push(story);
-                }
-            });
+		// get yesterday's date to sort last modded stories
+		// if yeterday was sunday then 'yesterday' is actually friday
+		let yesterday = moment().subtract(1, 'days').startOf('day');
+		if (yesterday.day() === 0) {
+			yesterday = yesterday.subtract(2, 'days');
+		}
 
-        console.log(standUp.data)
+		// sort stories by last updated by yesterday and the rest
+		let yesterdayWork = [];
+		let restOfMyWork = [];
+		standUp.data.mergedProjects.myStories.map(this.addCardInternalProps).forEach((story) => {
+			// seperate my work by yesterday's work and everything else
+			const storyDate = moment(new Date(story.updated_at));
+			if (storyDate.isAfter(yesterday)) {
+				yesterdayWork.push(story);
+			} else {
+				restOfMyWork.push(story);
+			}
+		});
 
-        // group by sprint (iteration name)
-        const ignoredWorkFlows = ['Deployed', 'Ready for Deploy'];
-        const iterationGroups = standUp.data.mergedProjects.frontendStories
-            .map(this.addCardInternalProps)
-            .reduce((acc, curr) => {
-                if (!curr.iterationName) curr.iterationName = 'No Sprint';
-                if (ignoredWorkFlows.includes(curr.workflowName)) return acc;
+		// group by sprint (iteration name)
+		const ignoredWorkFlows = ['Deployed', 'Ready for Deploy'];
+		const iterationGroups = standUp.data.mergedProjects.frontendStories.map(this.addCardInternalProps).reduce((acc, curr) => {
+			if (!curr.iterationName) curr.iterationName = 'No Sprint';
+			if (ignoredWorkFlows.includes(curr.workflowName)) return acc;
 
-                if (!acc[curr.iterationName]) acc[curr.iterationName] = [];
-                acc[curr.iterationName].push(curr);
-                return acc;
-            }, {});
+			if (!acc[curr.iterationName]) acc[curr.iterationName] = [];
+			acc[curr.iterationName].push(curr);
+			return acc;
+		}, {});
 
-        // sort by last updated
-        yesterdayWork.sort(this.sortByUpdatedDate);
-        restOfMyWork.sort(this.sortByUpdatedDate);
-        inDevCards.sort(this.sortByUpdatedDate);
-        readyForDevCards.sort(this.sortByUpdatedDate);
-        backendCards.sort(this.sortByUpdatedDate);
-        frontEndBacklog.sort(this.sortByUpdatedDate);
-        
-        // update UI
-        this.standUp = { iterationGroups, yesterdayWork, restOfMyWork, inDevCards, readyForDevCards, backendCards, frontEndBacklog };
-        this.yesterday = yesterday;
-        this.loading = standUp.loading;
-    }
+		// sort by last updated
+		yesterdayWork.sort(this.sortByUpdatedDate);
+		restOfMyWork.sort(this.sortByUpdatedDate);
+		inDevCards.sort(this.sortByUpdatedDate);
+		readyForDevCards.sort(this.sortByUpdatedDate);
+		backendCards.sort(this.sortByUpdatedDate);
+		frontEndBacklog.sort(this.sortByUpdatedDate);
 
-    /**
-     * filter out API/archived based card
-     * @param card 
-     */
-    private filterUnneededCards(card){
-        return card.projectName !== 'API' && !card.archived;
-    }
+		// update UI
+		this.standUp = { iterationGroups, yesterdayWork, restOfMyWork, inDevCards, readyForDevCards, backendCards, frontEndBacklog };
+		this.yesterday = yesterday;
+		this.loading = standUp.loading;
+	}
 
-    /**
-     * adds internal props for a card such as 'checked'
-     * @param card
-     */
-    private addCardInternalProps(card) {
-        card._internal = {
-            yesterdayChecked: false,
-            todayChecked: false,
-            blockChecked: false,
-        };
+	/**
+	 * filter out API/archived based card
+	 * @param card
+	 */
+	private filterUnneededCards(card) {
+		return card.projectName !== 'API' && !card.archived;
+	}
 
-        return card;
-    }
+	/**
+	 * adds internal props for a card such as 'checked'
+	 * @param card
+	 */
+	private addCardInternalProps(card) {
+		card._internal = {
+			yesterdayChecked: false,
+			todayChecked: false,
+			blockChecked: false,
+		};
 
-    private sortByUpdatedDate(a, b) {
-        a = new Date(a.updated_at);
-        b = new Date(b.updated_at);
-        return a > b ? -1 : a < b ? 1 : 0;
-    }
+		return card;
+	}
 
-    /**
-     * toggle a card's checked prop
-     * @param {string} event the click event
-     * @param {string} card the card object itself
-     */
-    public toggleCard({target:{name}}, card){
-        card._internal[name] = !card._internal[name];
-        this.updateStandUpList();
-    }
+	private sortByUpdatedDate(a, b) {
+		a = new Date(a.updated_at);
+		b = new Date(b.updated_at);
+		return a > b ? -1 : a < b ? 1 : 0;
+	}
 
-    private updateStandUpList(){
-        const yesterdayWork = [];
-        const todayWork = [];
-        const blockedWork = [];
+	/**
+	 * toggle a card's checked prop
+	 * @param {string} event the click event
+	 * @param {string} card the card object itself
+	 */
+	public toggleCard({ target: { name } }, card) {
+		card._internal[name] = !card._internal[name];
+		this.updateStandUpList();
+	}
 
-        // for each list, filter checked cards into their respective array above
-        this.standUp.yesterdayWork.forEach(card => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
-        this.standUp.inDevCards.forEach(card => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
-        this.standUp.readyForDevCards.forEach(card => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
-        this.standUp.backendCards.forEach(card => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
-        this.standUp.frontEndBacklog.forEach(card => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
-        this.standUp.restOfMyWork.forEach(card => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
+	private updateStandUpList() {
+		const yesterdayWork = [];
+		const todayWork = [];
+		const blockedWork = [];
 
-        // build yesterday's list
-        let standUpText = '\nYesterday:\n';
-        const yesterdayWorkText = yesterdayWork.map(this.cardTextLine.bind(this)).join('\n');
-        if (yesterdayWorkText){
-            standUpText += `${yesterdayWorkText}\n`;
-        } else {
-            standUpText += `- none\n`;
-        }
-        
-        // build today's list
-        standUpText += '\nToday:\n';
-        const todayWorkText = todayWork.map(this.cardTextLine.bind(this)).join('\n');
-        if (todayWorkText) {
-            standUpText += `${todayWorkText}\n`;
-        } else {
-            standUpText += `- none\n`;
-        }
+		// for each list, filter checked cards into their respective array above
+		this.standUp.yesterdayWork.forEach((card) => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
+		this.standUp.inDevCards.forEach((card) => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
+		this.standUp.readyForDevCards.forEach((card) => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
+		this.standUp.backendCards.forEach((card) => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
+		this.standUp.frontEndBacklog.forEach((card) => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
+		this.standUp.restOfMyWork.forEach((card) => this.filterCard(card, yesterdayWork, todayWork, blockedWork));
 
-        // build blocked list
-        standUpText += '\nBlocked:\n';
-        const blockedWorkText = blockedWork.map(this.cardTextLine.bind(this)).join('\n');
-        if (blockedWorkText) {
-            standUpText += `${blockedWorkText}\n`;
-        } else {
-            standUpText += `- none\n`;
-        }
+		// build yesterday's list
+		let standUpText = '\nYesterday:\n';
+		const yesterdayWorkText = yesterdayWork.map(this.cardTextLine.bind(this)).join('\n');
+		if (yesterdayWorkText) {
+			standUpText += `${yesterdayWorkText}\n`;
+		} else {
+			standUpText += `- none\n`;
+		}
 
-        this.standUpText = standUpText
-    }
+		// build today's list
+		standUpText += '\nToday:\n';
+		const todayWorkText = todayWork.map(this.cardTextLine.bind(this)).join('\n');
+		if (todayWorkText) {
+			standUpText += `${todayWorkText}\n`;
+		} else {
+			standUpText += `- none\n`;
+		}
 
-    private filterCard(card, yesterdayWork, todayWork, blockedWork){
+		// build blocked list
+		standUpText += '\nBlocked:\n';
+		const blockedWorkText = blockedWork.map(this.cardTextLine.bind(this)).join('\n');
+		if (blockedWorkText) {
+			standUpText += `${blockedWorkText}\n`;
+		} else {
+			standUpText += `- none\n`;
+		}
 
-        // if card is checked and not already in array
-        if (card._internal.yesterdayChecked && !yesterdayWork.find(o => o.id === card.id)){
-            yesterdayWork.push(card);
-        } 
+		this.standUpText = standUpText;
+	}
 
-        // check for today's list
-        if (card._internal.todayChecked && !todayWork.find(o => o.id === card.id)) {
-            todayWork.push(card);
-        }
+	private filterCard(card, yesterdayWork, todayWork, blockedWork) {
+		// if card is checked and not already in array
+		if (card._internal.yesterdayChecked && !yesterdayWork.find((o) => o.id === card.id)) {
+			yesterdayWork.push(card);
+		}
 
-        // check for blocked list
-        if (card._internal.blockChecked && !blockedWork.find(o => o.id === card.id)) {
-            blockedWork.push(card);
-        }
-    }
+		// check for today's list
+		if (card._internal.todayChecked && !todayWork.find((o) => o.id === card.id)) {
+			todayWork.push(card);
+		}
 
-    /**
-     * makes a card's list on the text area
-     * @param card 
-     * @return {string}
-     */
-    private cardTextLine(card) {
-        return `- [${card.epic_id}] ${card.name}`;
-    }
+		// check for blocked list
+		if (card._internal.blockChecked && !blockedWork.find((o) => o.id === card.id)) {
+			blockedWork.push(card);
+		}
+	}
 
-    public copyStandUp(){
-        this.copyText(this.standUpText);
-    }
+	/**
+	 * makes a card's list on the text area
+	 * @param card
+	 * @return {string}
+	 */
+	private cardTextLine(card) {
+		return `- [${card.epic_id}] ${card.name}`;
+	}
 
-    private copyText(text){
-        if (!text) return;
+	public copyStandUp() {
+		this.copyText(this.standUpText);
+	}
 
-        const selBox = document.createElement('textarea');
-        selBox.style.position = 'fixed';
-        selBox.style.left = '0';
-        selBox.style.top = '0';
-        selBox.style.opacity = '0';
-        selBox.value = text;
-        document.body.appendChild(selBox);
-        selBox.focus();
-        selBox.select();
-        document.execCommand('copy');
-        document.body.removeChild(selBox);
-    }
+	private copyText(text) {
+		if (!text) return;
+
+		const selBox = document.createElement('textarea');
+		selBox.style.position = 'fixed';
+		selBox.style.left = '0';
+		selBox.style.top = '0';
+		selBox.style.opacity = '0';
+		selBox.value = text;
+		document.body.appendChild(selBox);
+		selBox.focus();
+		selBox.select();
+		document.execCommand('copy');
+		document.body.removeChild(selBox);
+	}
 }

@@ -10,6 +10,6 @@ export class WorkSpaceService {
 	constructor(private readonly apiService: TogglApiService) {}
 
 	getWorkSpaces(authKey: string): Observable<WorkSpaceInterface[]> {
-		return this.apiService.getData('me/workspaces', authKey).pipe(map(response => response.data));
+		return this.apiService.getData('workspaces', authKey).pipe(map(response => response.data));
 	}
 }

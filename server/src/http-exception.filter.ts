@@ -3,16 +3,14 @@ import { Response } from 'express';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-    catch(exception: HttpException, host: ArgumentsHost) {
-        const ctx = host.switchToHttp();
-        const response = ctx.getResponse<Response>();
-        
-        response
-            .status(200)
-            .json({
-                statusCode: 200,
-                timestamp: new Date().toISOString(),
-                error: exception
-            });
-    }
+	catch(exception: HttpException, host: ArgumentsHost) {
+		const ctx = host.switchToHttp();
+		const response = ctx.getResponse<Response>();
+
+		response.status(200).json({
+			statusCode: 200,
+			timestamp: new Date().toISOString(),
+			error: exception,
+		});
+	}
 }

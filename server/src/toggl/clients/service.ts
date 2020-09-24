@@ -10,6 +10,6 @@ export class ClientsService {
 	constructor(private readonly apiService: TogglApiService) {}
 
 	getClients(authKey: string): Observable<ClientInterface[]> {
-		return this.apiService.getData('me/clients', authKey).pipe(map(response => response.data));
+		return this.apiService.getData('me?with_related_data=true', authKey).pipe(map(response => response.data.data.clients));
 	}
 }
